@@ -36,8 +36,7 @@
         return this.dripper.update();
       }), this);
       this.camera_operator = new CameraOperator({
-        camera: this.camera,
-        speed: 0.5
+        camera: this.camera
       });
       this.on('update', (function() {
         return this.camera_operator.update();

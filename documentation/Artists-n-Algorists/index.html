@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <title>Neo</title>
+    <style type="text/css">
+      body { padding-top: 40px; }
+      .hero-unit { height: 250px; background: url(impression.jpg) no-repeat center center; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="page-header row">
+          <h1 class="span13">Neo.js
+            <small>library for sensor interaction</small>
+          </h1>
+          <div class="span3">
+            <a class="btn primary large" href="neo.js">Download v0.22 &raquo;</a>
+          </div>
+      </header>
+
+        <div class="hero-unit">
+        </div>
+
+        <article>
+          <section>
+            <p>Adding an interactive layer to art installations adds an engaging dimension to your content. Through the use of
+               3d sensors and our advanced processing algorithms you can detect and respond to interactions with people
+               near your artwork. This can be by subtly responding to people walking by or by explicitly responding to touches on
+               the screen or beamer projection.</p>
+
+            <p>Artworks are created using standard HTML. The artwork installation runs a custom version of Google Chrome, which
+              can handle even the very latest HTML5 APIs like WebGL, Canvas and Video. This page explains how you
+              can add capabilities to interact with people in the environment of your own HTML5 artwork.</p>
+          </section>
+
+          <section>
+            <h2>Getting started</h2>
+            <p>Your artwork starts with a basic HTML page. To make sure your artwork works on our installation as well, you
+              need to verify that it also works using Chrome.</p>
+
+            <p>Next, you need to include the Neo.js Javascript library in your .html file. You can do this by adding the
+              following line to your page:<p>
+
+              <code>&lt;script type="text/javascript" src="neo.js"&gt;&lt;/script&gt;</code>
+
+              <p>This library allows you to receive events from our system and to simulate various interaction events without
+                the need to have access to a full sensor installation.</p>
+
+              <p>Let's start with responding to touches. A touch is when an object is detected within a certain range in front
+                of the screen. The sensor system determines the center point of that object relative to the screen and sends it
+                to your artwork. After this translation you will receive the screen coordinates of that touch. Listening to touch
+                events is nearly identical to touch events as they are fired on regular touch devices like iPads.
+                A basic touch interaction can be added by adding the following event listeners:</p>
+
+                <code>document.addEventListener("touchstart", function(e) { /* code when one or more touches start */ });<br>
+                      document.addEventListener("touchmove", function(e) { /* code when one or more touches move */ });<br>
+                      document.addEventListener("touchend", function(e) { /* code when one or more touches end */ });</code>
+
+              <p>To be able to test this on your own system, Neo.js will automatically translate clicks on your page to
+                touch events. After reloading your page, a click should result in the alert message.</p>
+
+              <p>Catching user events works similar, though you would need the simulator to test how your visual works (see Simulator part below)<p>
+              <code>document.addEventListener("userstart", function(e) { /* code when one or more users start */ }, false);<br />
+                    document.addEventListener("usermove", function(e) { /* code when one or more users move */ }, false);<br />
+                    document.addEventListener("userend", function(e) { /* code when one or more touches end */ }, false);</code>
+
+
+          </section>
+
+          <section>
+            <h2>Reference</h2>
+            <h3>Settings file</h3>
+            <p>Neo has several configuration options</p>
+            <code>
+              &lt;!- include after including neo.js --&gt;<br>
+              &lt;script type="text/javascript" type="text/javascript"&gt;<br>
+                neo.settings.ALTERNATIVE_INTERFACE = false; // Now only used for flash. If we need to dispatch events to something else than the DOM<br>
+                neo.settgins.USE_SIMULATOR = true; // Enable mouse interaction to simulate events<br>
+                neo.settings.USE_EVENT_VISUALIZER = false; // grey and red dots on the screen showing the events<br>
+                neo.settings.USE_AUTOPILOT = true // generate touches and users if there is no activity<br>
+                neo.settings.AUTOPILOT_INTENSITY = 0.5; // how much touches and users are simulated<br>
+                neo.settings.AUTOPILOT_ALWAYS_ACTIVE = false // now matter the usage of the screen, always simulate events<br>
+                neo.settings.FEEDBACK = true; // show the gif to the user that he's actually touching <br>
+              &lt;/script&gt;<br>
+            </code>
+            <h3>Simulator</h3>
+            <p>To simulate the data that will eventually come from the sensors, you can now use your mouse.</p>
+            <p>When you click the visual, you'll see a small grey circle appear, this simulates a touch event. To have several touches at the same time you can press "H". To release the touches on the screen press "R".</p>
+            <p>To simulate a user you can press "U" a small popup will appear in which you can double click to add or remove a user. Dragging the user horizontally will simulate a moving user, dragging it vertically will simulate the user moving closer from and to the screen</p>
+            
+            <h3>Visualizer</h3>
+            <p>If the simulator is enabled it's possible to get visual feedback of the touch and user events. Enable USE_EVENT_VISUALIZER to show events</p>
+
+            <h3>AutoPilot</h3>
+            <p>Auto pilot makes sure there is always activity on the screen(s) even if there are no users or touches being picked up by the actual sensors. All the different configuration options are briefly described in the "settings file" section</p>
+
+            <h3>Other libraries</h3>
+            <p>There are several open source libraries we use for the visuals we are creating ourselves, these are listed below. Feel free to use any other library open source library that can be used in commercial projects</p>
+            <ul>
+              <li><a href="http://threejs.org/"><strong>three.js</strong> by Mr. Doob</a></li>
+              <li><a href="http://www.createjs.com/#!/TweenJS"><strong>tween.js</strong> by several contributors</a></li>
+            </ul>
+          </section>
+        </article>
+
+        <footer class="footer">
+          <p>&copy; MCXIII Present Plus &amp; Art'otel, Amsterdam. All rights reserved.</p>
+        </footer>
+    </div>
+
+  </body>
+</html>

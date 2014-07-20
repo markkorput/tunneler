@@ -8,8 +8,15 @@ class @Dripper extends Backbone.Model
     @scene = @options.scene
     @camera = @options.camera
 
-    @geometry = new THREE.CubeGeometry(1,1,1)
-    @material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } )
+      
+    # @geometry = new THREE.CylinderGeometry( 1, 1, 1, 10 ) 
+    # @geometry = new THREE.SphereGeometry 1 , 25, 25 
+    @geometry = new THREE.CubeGeometry 1, 1, 1 
+
+
+    # @material = new THREE.MeshBasicMaterial( { color: 0xffffff } )
+    # @material = new THREE.MeshNormalMaterial( { color: 0xffffff } )
+    @material = new THREE.MeshLambertMaterial({color: 0xFF0000 })
 
     @drips = []
 
@@ -24,26 +31,30 @@ class @Dripper extends Backbone.Model
 
   generateDrip: ->
     mesh = new THREE.Mesh( @geometry, @material )
-    mesh.position.z = @camera.position.z
-    mesh.position.x = -5 + Math.random() * 10
-    mesh.position.y = -5 + Math.random() * 10
+    mesh.position.x = -50 + Math.random() * 100
+    mesh.position.y = -50 + Math.random() * 100
+    mesh.position.z = @camera.position.z - mesh.geometry.depth - 0.1
+    # console.log mesh
+    # mesh.name = "drip_"+@lastDrip
     mesh
 
   update: ->
     curDrip = new Date().getTime()
-    return if @lastDrip && (curDrip - @lastDrip) < 500
+    return if @lastDrip && (curDrip - @lastDrip) < 100
     @lastDrip = curDrip
 
     # create new particle
     drip = @generateDrip()
     @drips.push drip
-    @scene.add( drip )
+    @scene.add drip
+    # console.log "Dripping... new number of drips: " + @drips.length
 
-    # this is crashing?!
-    #console.log @camera.position.z + " / " + @drips[0].position.z
-    #while @drips[0] && Math.abs(@camera.position.z - @drips[0].position.z) > 2
-    #  @scene.remove @drips[0]
-    #  @drips.slice(1)
+    while @drips[0] && Math.abs(@camera.position.z - @drips[0].position.z) > (@options.max_depth || 500)
+      # remove from scene
+      @scene.remove @drips[0]
+      # remove from array
+      @drips = @drips.slice(1)
+
 
 
 

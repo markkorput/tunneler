@@ -18,10 +18,8 @@
     };
 
     App.prototype._initVfx = function() {
-      this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
-      this.renderer = new THREE.WebGLRenderer({
-        preserveDrawingBuffer: true
-      });
+      this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+      this.renderer = new THREE.WebGLRenderer();
       this.renderer.setSize(window.innerWidth, window.innerHeight);
       return document.body.appendChild(this.renderer.domElement);
     };
@@ -36,7 +34,9 @@
         return this.dripper.update();
       }), this);
       this.camera_operator = new CameraOperator({
-        camera: this.camera
+        camera: this.camera,
+        scene: this.scene,
+        speed: 0.1
       });
       this.on('update', (function() {
         return this.camera_operator.update();

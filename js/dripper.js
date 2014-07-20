@@ -16,8 +16,8 @@
       this.scene = this.options.scene;
       this.camera = this.options.camera;
       this.geometry = new THREE.CubeGeometry(1, 1, 1);
-      this.material = new THREE.MeshBasicMaterial({
-        color: 0x00ff00
+      this.material = new THREE.MeshLambertMaterial({
+        color: 0xFF0000
       });
       return this.drips = [];
     };
@@ -34,22 +34,28 @@
     Dripper.prototype.generateDrip = function() {
       var mesh;
       mesh = new THREE.Mesh(this.geometry, this.material);
-      mesh.position.z = this.camera.position.z;
-      mesh.position.x = -5 + Math.random() * 10;
-      mesh.position.y = -5 + Math.random() * 10;
+      mesh.position.x = -50 + Math.random() * 100;
+      mesh.position.y = -50 + Math.random() * 100;
+      mesh.position.z = this.camera.position.z - mesh.geometry.depth - 0.1;
       return mesh;
     };
 
     Dripper.prototype.update = function() {
-      var curDrip, drip;
+      var curDrip, drip, _results;
       curDrip = new Date().getTime();
-      if (this.lastDrip && (curDrip - this.lastDrip) < 500) {
+      if (this.lastDrip && (curDrip - this.lastDrip) < 100) {
         return;
       }
       this.lastDrip = curDrip;
       drip = this.generateDrip();
       this.drips.push(drip);
-      return this.scene.add(drip);
+      this.scene.add(drip);
+      _results = [];
+      while (this.drips[0] && Math.abs(this.camera.position.z - this.drips[0].position.z) > (this.options.max_depth || 500)) {
+        this.scene.remove(this.drips[0]);
+        _results.push(this.drips = this.drips.slice(1));
+      }
+      return _results;
     };
 
     return Dripper;

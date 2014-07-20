@@ -11,10 +11,10 @@ class @App extends Backbone.Model
 
 	_initVfx: ->
 		# @camera = new THREE.OrthographicCamera(-1200, 1000, -1100, 1200, 10, 10000)
-		@camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000)
-		
+		@camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
+
 		# @renderer = new THREE.CanvasRenderer()
-		@renderer = new THREE.WebGLRenderer({preserveDrawingBuffer: true}) # preserveDrawingBuffer: true allows for image exports, but has some performance implications
+		@renderer = new THREE.WebGLRenderer() #({preserveDrawingBuffer: true}) # preserveDrawingBuffer: true allows for image exports, but has some performance implications
 
 		@renderer.setSize(window.innerWidth, window.innerHeight)
 		document.body.appendChild(this.renderer.domElement)
@@ -25,7 +25,7 @@ class @App extends Backbone.Model
 		@dripper = new Dripper(scene: @scene, camera: @camera)
 		@on 'update', (-> @dripper.update()), this
 
-		@camera_operator = new CameraOperator(camera: @camera)
+		@camera_operator = new CameraOperator(camera: @camera, scene: @scene, speed: 0.1)
 		@on 'update', (-> @camera_operator.update()), this
 
 		return @scene

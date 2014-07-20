@@ -15,16 +15,28 @@
       this.destroy();
       this.scene = this.options.scene;
       this.camera = this.options.camera;
-      return this.camera.position.z = 5;
+      this.camera.position.z = 0;
+      this.light = new THREE.PointLight(0xFF0000);
+      this.light.position.x = 10;
+      this.light.position.y = 50;
+      this.light.position.copy(this.camera.position);
+      this.light.position.x += 3;
+      this.light.position.y += 3;
+      return this.scene.add(this.light);
     };
 
     CameraOperator.prototype.destroy = function() {
       this.trigger('destroy');
+      if (this.light) {
+        this.scene.remove(this.light);
+        this.light = void 0;
+      }
       return this.scene = this.camera = void 0;
     };
 
     CameraOperator.prototype.update = function() {
-      return this.camera.position.z += this.speed();
+      this.camera.position.z += this.speed();
+      return this.light.position.z = this.camera.position.z;
     };
 
     CameraOperator.prototype.speed = function() {

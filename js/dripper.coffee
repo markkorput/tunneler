@@ -17,6 +17,9 @@ class @Dripper extends Backbone.Model
     # @material = new THREE.MeshBasicMaterial( { color: 0xffffff } )
     # @material = new THREE.MeshNormalMaterial( { color: 0xffffff } )
     @material = new THREE.MeshLambertMaterial({color: 0xFF0000 })
+    # @material = new THREE.ShaderMaterial
+    #   vertexShader:   $('#vert-shader').text()
+    #   fragmentShader: $('#frag-shader').text()
 
     @drips = []
 

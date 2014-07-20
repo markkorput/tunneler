@@ -28,6 +28,8 @@ class @App extends Backbone.Model
 		@camera_operator = new CameraOperator(camera: @camera, scene: @scene, speed: 0.1)
 		@on 'update', (-> @camera_operator.update()), this
 
+		@post_processor = new PostProcessor(renderer: @renderer, camera: @camera, scene: @scene)
+
 		return @scene
 
 	update: ->
@@ -39,6 +41,10 @@ class @App extends Backbone.Model
 		@trigger 'update'
 
 	draw: ->
+		if @post_processor
+			@post_processor.composer.render()
+			return
+
 		@renderer.render(@scene, @camera)
 
 	togglePause: ->

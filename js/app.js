@@ -41,6 +41,11 @@
       this.on('update', (function() {
         return this.camera_operator.update();
       }), this);
+      this.post_processor = new PostProcessor({
+        renderer: this.renderer,
+        camera: this.camera,
+        scene: this.scene
+      });
       return this.scene;
     };
 
@@ -57,6 +62,10 @@
     };
 
     App.prototype.draw = function() {
+      if (this.post_processor) {
+        this.post_processor.composer.render();
+        return;
+      }
       return this.renderer.render(this.scene, this.camera);
     };
 

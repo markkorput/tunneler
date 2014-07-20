@@ -46,6 +46,9 @@
         camera: this.camera,
         scene: this.scene
       });
+      this.on('update', (function() {
+        return this.post_processor.update();
+      }), this);
       return this.scene;
     };
 

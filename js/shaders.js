@@ -132,18 +132,20 @@ THREE.RGBShiftShader = {
 
     "tDiffuse": { type: "t", value: null },
     "amount":   { type: "f", value: 0.005 },
-    "angle":    { type: "f", value: 0.0 }
+    "angle":    { type: "f", value: 0.0 },
+    "amplitude": { type: "f", value: 0.0 }
 
   },
 
   vertexShader: [
 
     "varying vec2 vUv;",
+    "uniform float amplitude;",
 
     "void main() {",
-
       "vUv = uv;",
-      "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+      "vec3 newPosition = position + vec3(amplitude, 0.0, 0.0);",
+      "gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );",
 
     "}"
 

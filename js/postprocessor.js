@@ -12,20 +12,19 @@
     }
 
     PostProcessor.prototype.init = function() {
-      var effect;
       this.destroy();
       this.renderer = this.options.renderer;
       this.scene = this.options.scene;
       this.camera = this.options.camera;
       this.composer = new THREE.EffectComposer(this.renderer);
       this.composer.addPass(new THREE.RenderPass(this.scene, this.camera));
-      effect = new THREE.ShaderPass(THREE.DotScreenShader);
-      effect.uniforms['scale'].value = 4;
-      this.composer.addPass(effect);
-      effect = new THREE.ShaderPass(THREE.RGBShiftShader);
-      effect.uniforms['amount'].value = 0.0015;
-      effect.renderToScreen = true;
-      return this.composer.addPass(effect);
+      this.effect1 = new THREE.ShaderPass(THREE.DotScreenShader);
+      this.effect1.uniforms['scale'].value = 4;
+      this.composer.addPass(this.effect1);
+      this.effect2 = new THREE.ShaderPass(THREE.RGBShiftShader);
+      this.effect2.uniforms['amount'].value = 0.0015;
+      this.effect2.renderToScreen = true;
+      return this.composer.addPass(this.effect2);
     };
 
     PostProcessor.prototype.destroy = function() {
@@ -34,6 +33,12 @@
         this.composer = void 0;
       }
       return this.scene = this.camera = void 0;
+    };
+
+    PostProcessor.prototype.update = function() {
+      this.frame || (this.frame = 0);
+      this.effect2.uniforms.amplitude.value = Math.sin(this.frame) * 0.1;
+      return this.frame += 0.05;
     };
 
     return PostProcessor;

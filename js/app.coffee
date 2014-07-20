@@ -29,6 +29,7 @@ class @App extends Backbone.Model
 		@on 'update', (-> @camera_operator.update()), this
 
 		@post_processor = new PostProcessor(renderer: @renderer, camera: @camera, scene: @scene)
+		@on 'update', (-> @post_processor.update()), this
 
 		return @scene
 

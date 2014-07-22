@@ -20,8 +20,19 @@
     App.prototype._initVfx = function() {
       this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
       this.renderer = new THREE.WebGLRenderer();
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
+      this._resize();
+      $(window).resize(this._resize);
       return document.body.appendChild(this.renderer.domElement);
+    };
+
+    App.prototype._resize = function(event) {
+      if (this.camera) {
+        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
+      }
+      if (this.renderer) {
+        return this.renderer.setSize(window.innerWidth, window.innerHeight);
+      }
     };
 
     App.prototype._createScene = function() {

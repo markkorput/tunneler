@@ -36,7 +36,7 @@
       this.camera_operator = new CameraOperator({
         camera: this.camera,
         scene: this.scene,
-        speed: 0.1
+        speed: 3
       });
       this.on('update', (function() {
         return this.camera_operator.update();

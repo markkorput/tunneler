@@ -52,7 +52,7 @@ class @Dripper extends Backbone.Model
     @scene.add drip
     # console.log "Dripping... new number of drips: " + @drips.length
 
-    while @drips[0] && Math.abs(@camera.position.z - @drips[0].position.z) > (@options.max_depth || 500)
+    while @drips[0] && Math.abs(@camera.position.z - @drips[0].position.z) > (@options.max_depth || 5000)
       # remove from scene
       @scene.remove @drips[0]
       # remove from array

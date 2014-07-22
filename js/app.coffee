@@ -25,7 +25,7 @@ class @App extends Backbone.Model
 		@dripper = new Dripper(scene: @scene, camera: @camera)
 		@on 'update', (-> @dripper.update()), this
 
-		@camera_operator = new CameraOperator(camera: @camera, scene: @scene, speed: 0.1)
+		@camera_operator = new CameraOperator(camera: @camera, scene: @scene, speed: 3)
 		@on 'update', (-> @camera_operator.update()), this
 
 		@post_processor = new PostProcessor(renderer: @renderer, camera: @camera, scene: @scene)

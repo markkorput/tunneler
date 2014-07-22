@@ -31,5 +31,9 @@ class @PostProcessor extends Backbone.Model
 
   update: ->
     @frame ||= 0
-    @effect2.uniforms.amplitude.value = Math.sin(@frame) * 0.1
+    @effect2.uniforms.amplitude.value = Math.sin(@frame) * 0.03
+
+    tmp = 150 + Math.sin(@frame*0.1)*106
+    @effect1.uniforms.tSize.value = new THREE.Vector2(tmp,tmp)
+
     @frame += 0.05

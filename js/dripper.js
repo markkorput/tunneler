@@ -51,7 +51,7 @@
       this.drips.push(drip);
       this.scene.add(drip);
       _results = [];
-      while (this.drips[0] && Math.abs(this.camera.position.z - this.drips[0].position.z) > (this.options.max_depth || 500)) {
+      while (this.drips[0] && Math.abs(this.camera.position.z - this.drips[0].position.z) > (this.options.max_depth || 5000)) {
         this.scene.remove(this.drips[0]);
         _results.push(this.drips = this.drips.slice(1));
       }

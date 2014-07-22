@@ -36,8 +36,11 @@
     };
 
     PostProcessor.prototype.update = function() {
+      var tmp;
       this.frame || (this.frame = 0);
-      this.effect2.uniforms.amplitude.value = Math.sin(this.frame) * 0.1;
+      this.effect2.uniforms.amplitude.value = Math.sin(this.frame) * 0.03;
+      tmp = 150 + Math.sin(this.frame * 0.1) * 106;
+      this.effect1.uniforms.tSize.value = new THREE.Vector2(tmp, tmp);
       return this.frame += 0.05;
     };
 

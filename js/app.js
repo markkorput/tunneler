@@ -12,8 +12,6 @@
     }
 
     App.prototype.init = function() {
-      this._initVfx();
-      this._createScene();
       this.controls = new Controls();
       this.controls.on('toggle-loop', (function(value) {
         return this.timer.set({
@@ -26,11 +24,13 @@
       this.timer = new Timer({
         duration: 3000
       });
-      this.on('update', this.timer.update, this.timer);
       this.timer.start();
       this.timer.on('change:progress', (function(timer, progress, obj) {
         return this.controls.data.timeline = progress * 100;
       }), this);
+      this.on('update', this.timer.update, this.timer);
+      this._initVfx();
+      this._createScene();
       return this.update();
     };
 
@@ -53,6 +53,7 @@
     };
 
     App.prototype._createScene = function() {
+      var _this = this;
       this.scene = new THREE.Scene();
       this.dripper = new Dripper({
         scene: this.scene,
@@ -79,6 +80,17 @@
       this.on('update', (function() {
         return this.post_processor.update();
       }), this);
+      this.astroid = new Astroid({
+        scene: this.scene,
+        camera: this.camera
+      });
+      this.timer.on('change:progress', function(timer, progress, obj) {
+        if (progress < 0.3 || progress > 0.8) {
+          _this.astroid.hide();
+          return;
+        }
+        return _this.astroid.update((progress - 0.3) / (0.8 - 0.3));
+      });
       return this.scene;
     };
 

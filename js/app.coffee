@@ -4,21 +4,18 @@ class @App extends Backbone.Model
 		@init()
 
 	init: ->
-		@_initVfx()
-		@_createScene()
-
 		@controls = new Controls()
 		@controls.on 'toggle-loop', ((value) -> @timer.set(loop: value).start()), this
 		@controls.on 'timeline', ((value) -> @timer.setProgress(value)), this
 
 		@timer = new Timer(duration: 3000)		
-		@on 'update', @timer.update, @timer
 		@timer.start()
 		@timer.on 'change:progress', ((timer, progress, obj) -> @controls.data.timeline = progress * 100), this
+		@on 'update', @timer.update, @timer
 
+		@_initVfx()
+		@_createScene()
 		@update()
-
-		
 
 	_initVfx: ->
 		# @camera = new THREE.OrthographicCamera(-1200, 1000, -1100, 1200, 10, 10000)
@@ -54,6 +51,17 @@ class @App extends Backbone.Model
 
 		@post_processor = new PostProcessor(renderer: @renderer, camera: @camera, scene: @scene)
 		@on 'update', (-> @post_processor.update()), this
+
+		# create astroid; a timer-managed animation object
+		@astroid = new Astroid(scene: @scene, camera: @camera)
+		# controlled by timeline; an animation that shows between 0.3 and 0.8
+		@timer.on 'change:progress', (timer, progress, obj) =>
+			if progress < 0.3 || progress > 0.8
+				@astroid.hide()
+				return
+
+			@astroid.update((progress - 0.3) / (0.8-0.3))
+
 
 		return @scene
 

@@ -55,11 +55,14 @@
     };
 
     Astroid.prototype.update = function(progress) {
+      var s;
       this.show();
       if (this.mesh) {
         this.mesh.position.z = this.camera.position.z - 100 - 40 * progress;
         this.mesh.rotation.x += progress * -0.02;
-        return this.mesh.rotation.y += progress * 0.01;
+        this.mesh.rotation.y += progress * 0.01;
+        s = Math.sin(progress * Math.PI);
+        return this.mesh.scale = new THREE.Vector3(s, s, s);
       }
     };
 

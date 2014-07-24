@@ -35,6 +35,8 @@ class @Astroid extends Backbone.Model
       @mesh.position.z = @camera.position.z - 100 - 40 * progress
       @mesh.rotation.x += progress * -0.02
       @mesh.rotation.y += progress * 0.01
+      s = Math.sin(progress * Math.PI)
+      @mesh.scale = new THREE.Vector3(s,s,s)
 
 
 

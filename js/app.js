@@ -18,7 +18,7 @@
       this.controls.on('toggle-loop', (function(value) {
         return this.timer.set({
           loop: value
-        });
+        }).start();
       }), this);
       this.controls.on('timeline', (function(value) {
         return this.timer.setProgress(value);

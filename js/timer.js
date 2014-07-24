@@ -14,15 +14,36 @@
 
     Timer.prototype.initialize = function() {
       this.on('change:state', this._onStateChange, this);
-      this.on('change:time');
-      return this.set({
-        state: 'stopped'
-      });
+      this.on('end', (function() {
+        if (this._looping()) {
+          return this.trigger('loop reset');
+        }
+      }), this);
+      this.on('end', (function() {
+        if (!this._looping()) {
+          return this.set({
+            progress: 1,
+            time: this.get('duration')
+          }).stop();
+        }
+      }), this);
+      this.on('reset', (function() {
+        return this.set({
+          startTime: this.get('startTime') + this.get('duration')
+        });
+      }), this);
+      return this.stop();
     };
 
     Timer.prototype.start = function() {
       return this.set({
         state: 'playing'
+      });
+    };
+
+    Timer.prototype.stop = function() {
+      return this.set({
+        state: 'stopped'
       });
     };
 
@@ -61,17 +82,7 @@
           progress: this._progress()
         };
         if (data.progress && data.progress > 1) {
-          if (this._looping()) {
-            this.set({
-              startTime: this.get('startTime') + this.get('duration')
-            });
-            this.update();
-            return;
-          }
-          this.set({
-            progress: 1,
-            time: this.get('duration')
-          });
+          this.trigger('end');
           return;
         }
         return this.set(data);

@@ -8,7 +8,7 @@ class @App extends Backbone.Model
 		@_createScene()
 
 		@controls = new Controls()
-		@controls.on 'toggle-loop', ((value) -> @timer.set(loop: value)), this
+		@controls.on 'toggle-loop', ((value) -> @timer.set(loop: value).start()), this
 		@controls.on 'timeline', ((value) -> @timer.setProgress(value)), this
 
 		@timer = new Timer(duration: 3000)		

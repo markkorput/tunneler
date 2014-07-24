@@ -1,12 +1,14 @@
 class @Timer extends Backbone.Model
   initialize: ->
     @on 'change:state', @_onStateChange, this
-    @on 'change:time'
+    @on 'end', (-> @trigger 'loop reset' if @_looping()), this
+    @on 'end', (-> @set(progress: 1, time: @get('duration')).stop() if !@_looping()), this
+    @on 'reset', (-> @set(startTime: @get('startTime') + @get('duration'))), this
 
-    @set state: 'stopped'
+    @stop()
 
-  start: ->
-    @set state: 'playing'
+  start: -> @set state: 'playing'
+  stop: -> @set state: 'stopped'
 
   curTime: -> new Date().getTime()
 
@@ -29,12 +31,7 @@ class @Timer extends Backbone.Model
       # When progress reaches one, it means the end of the timeline (specified by duration) is reached,
       # simply loop back to the beginning
       if data.progress && data.progress > 1
-        if @_looping()
-          @set(startTime: @get('startTime') + @get('duration'))
-          @update()
-          return
-
-        @set(progress: 1, time: @get('duration'))
+        @trigger 'end'
         return
 
       # console.log data

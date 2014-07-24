@@ -36,7 +36,7 @@
 
     CameraOperator.prototype.update = function() {
       this.camera.position.z += this.speed();
-      this.camera.rotation.z += 0.001;
+      this.camera.rotation.z += this.options.rotation_speed || 0.001;
       return this.light.position.z = this.camera.position.z;
     };
 

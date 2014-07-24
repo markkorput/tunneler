@@ -39,7 +39,8 @@
       this.scene = new THREE.Scene();
       this.dripper = new Dripper({
         scene: this.scene,
-        camera: this.camera
+        camera: this.camera,
+        drip_delay: 30
       });
       this.on('update', (function() {
         return this.dripper.update();
@@ -47,7 +48,8 @@
       this.camera_operator = new CameraOperator({
         camera: this.camera,
         scene: this.scene,
-        speed: 3
+        speed: 3,
+        rotation_speed: 0.01
       });
       this.on('update', (function() {
         return this.camera_operator.update();

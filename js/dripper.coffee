@@ -43,7 +43,7 @@ class @Dripper extends Backbone.Model
 
   update: ->
     curDrip = new Date().getTime()
-    return if @lastDrip && (curDrip - @lastDrip) < 100
+    return if @lastDrip && (curDrip - @lastDrip) < (@options.drip_delay || 100)
     @lastDrip = curDrip
 
     # create new particle

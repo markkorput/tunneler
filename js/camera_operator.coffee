@@ -30,7 +30,7 @@ class @CameraOperator extends Backbone.Model
 
   update: ->
     @camera.position.z += @speed()
-    @camera.rotation.z += 0.001
+    @camera.rotation.z += (@options.rotation_speed || 0.001)
     @light.position.z = @camera.position.z
 
   speed: ->

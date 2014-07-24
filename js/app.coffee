@@ -35,10 +35,10 @@ class @App extends Backbone.Model
 	_createScene: ->
 		@scene = new THREE.Scene()
 
-		@dripper = new Dripper(scene: @scene, camera: @camera)
+		@dripper = new Dripper(scene: @scene, camera: @camera, drip_delay: 30)
 		@on 'update', (-> @dripper.update()), this
 
-		@camera_operator = new CameraOperator(camera: @camera, scene: @scene, speed: 3)
+		@camera_operator = new CameraOperator(camera: @camera, scene: @scene, speed: 3, rotation_speed: 0.01)
 		@on 'update', (-> @camera_operator.update()), this
 
 		@post_processor = new PostProcessor(renderer: @renderer, camera: @camera, scene: @scene)

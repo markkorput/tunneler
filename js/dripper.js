@@ -43,7 +43,7 @@
     Dripper.prototype.update = function() {
       var curDrip, drip, _results;
       curDrip = new Date().getTime();
-      if (this.lastDrip && (curDrip - this.lastDrip) < 100) {
+      if (this.lastDrip && (curDrip - this.lastDrip) < (this.options.drip_delay || 100)) {
         return;
       }
       this.lastDrip = curDrip;

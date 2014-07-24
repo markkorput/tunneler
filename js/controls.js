@@ -12,20 +12,22 @@
     }
 
     Controls.prototype.init = function() {
-      var data, folder,
+      var folder, timeliner,
         _this = this;
       this.destroy();
       $(document).on('mousedown', this.mousedown);
       $(document).on('keydown', this.keydown);
       this.gui = new dat.GUI();
-      data = new function() {
-        return this.timeline = 0.0;
+      this.data = new function() {
+        return this.timeline = 0;
       };
       folder = this.gui.addFolder('Elements');
-      folder.add(data, 'timeline', 0, 1).onChange(function(val) {
-        return _this.trigger('timeline', val);
+      timeliner = folder.add(this.data, 'timeline', 0, 100);
+      folder.open();
+      timeliner.listen();
+      return timeliner.onChange(function(val) {
+        return _this.trigger('timeline', val / 100);
       });
-      return folder.open();
     };
 
     Controls.prototype.destroy = function() {

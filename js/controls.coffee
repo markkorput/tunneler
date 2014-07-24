@@ -11,14 +11,17 @@ class @Controls extends Backbone.Model
 
 		@gui = new dat.GUI()
 
-		data = new ->
+		@data = new ->
 			# @Stripes = => 
-			@timeline = 0.0
+			@timeline = 0
 
 		folder = @gui.addFolder 'Elements'
-		# folder.add(data, 'Stripes').listen => @trigger 'stripes'
-		folder.add(data, 'timeline', 0, 1).onChange (val) => @trigger 'timeline', val
+		# folder.add(@data, 'Stripes').listen()
+		timeliner = folder.add(@data, 'timeline', 0, 100)
 		folder.open()
+
+		timeliner.listen()
+		timeliner.onChange (val) => @trigger('timeline', val/100) # communicate in 0.0 - 1.0 ranges with outside
 
 	destroy: ->
 		@trigger 'destroy'

@@ -15,6 +15,14 @@
       this._initVfx();
       this._createScene();
       this.controls = new Controls();
+      this.timer = new Timer({
+        duration: 3000
+      });
+      this.on('update', this.timer.update, this.timer);
+      this.timer.start();
+      this.timer.on('change:progress', (function(timer, progress, obj) {
+        return this.controls.data.timeline = progress * 100;
+      }), this);
       return this.update();
     };
 

@@ -6,8 +6,17 @@ class @App extends Backbone.Model
 	init: ->
 		@_initVfx()
 		@_createScene()
+
 		@controls = new Controls()
+
+		@timer = new Timer(duration: 3000)		
+		@on 'update', @timer.update, @timer
+		@timer.start()
+		@timer.on 'change:progress', ((timer, progress, obj) -> @controls.data.timeline = progress * 100), this
+
 		@update()
+
+		
 
 	_initVfx: ->
 		# @camera = new THREE.OrthographicCamera(-1200, 1000, -1100, 1200, 10, 10000)

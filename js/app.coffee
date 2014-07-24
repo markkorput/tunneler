@@ -1,12 +1,14 @@
 class @App extends Backbone.Model
-	constructor: (_opts) ->
-		@options = _opts || {}
+	initialize: ->
 		@init()
 
 	init: ->
 		@controls = new Controls()
 		@controls.on 'toggle-loop', ((value) -> @timer.set(loop: value).start()), this
 		@controls.on 'timeline', ((value) -> @timer.setProgress(value)), this
+		@controls.on 'toggle-playing', ((playing)-> @set(paused: !playing)), this
+
+		@on 'change:paused', ((app, paused, obj) -> @timer.setPaused(paused)), this
 
 		@timer = new Timer(duration: 3000)		
 		@timer.start()
@@ -70,7 +72,7 @@ class @App extends Backbone.Model
 			@update()
 			@draw()
 
-		return if @paused
+		return if @get('paused') == true
 		@trigger 'update'
 
 	draw: ->
@@ -80,9 +82,4 @@ class @App extends Backbone.Model
 
 		@renderer.render(@scene, @camera)
 
-	togglePause: ->
-		@paused = (@paused != true);
-		if @paused
-			console.log 'Paused'
-		else
-			console.log 'Continue'
+

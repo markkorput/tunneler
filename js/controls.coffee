@@ -15,9 +15,14 @@ class @Controls extends Backbone.Model
 			# @Stripes = => 
 			@timeline = 0
 			@loop = true
+			@playing = true
 
 		folder = @gui.addFolder 'Animation'
 		folder.open()
+
+		item = folder.add(@data, 'playing')
+		item.listen()
+		item.onChange (val) => @trigger('toggle-playing', val)
 
 		item = folder.add(@data, 'timeline', 0, 100)
 		item.listen()
@@ -35,19 +40,23 @@ class @Controls extends Backbone.Model
 			@gui.destroy()
 			@gui = undefined
 
-	mousedown: (e) ->
+	mousedown: (e) =>
 		# console.log e
 		# e.preventDefault()
 		# e.stopPropagation()
 
-	keydown: (e) ->
+	keydown: (e) =>
 		# console.log e
 		# e.preventDefault()
 		# e.stopPropagation()
 
 		# if event.which >= 48 && event.which <= 57 # 0 - 9
 		@trigger 'reset' if(event.which == 27) # escape
-		@trigger 'toggle-pause' if event.which == 32 # SPACE
+
+		if event.which == 32 # SPACE
+			@data.playing = (@data.playing != true)
+			@trigger('toggle-playing', @data.playing)
+
 		@trigger 'screenshot' if event.which == 13 # ENTER
 
 

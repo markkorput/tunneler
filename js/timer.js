@@ -47,6 +47,18 @@
       });
     };
 
+    Timer.prototype.setPaused = function(pause) {
+      if (pause) {
+        return this.set({
+          state: 'paused'
+        });
+      } else {
+        return this.set({
+          state: 'playing'
+        });
+      }
+    };
+
     Timer.prototype.curTime = function() {
       return new Date().getTime();
     };
@@ -91,9 +103,14 @@
 
     Timer.prototype._onStateChange = function(timer, state, obj) {
       if (state === 'playing') {
-        this.set({
-          startTime: this.curTime()
-        });
+        if (this.previous('state') === 'paused') {
+          this.setProgress(this.get('progress'));
+        }
+        if (this.previous('state') === 'stopped') {
+          this.set({
+            startTime: this.curTime()
+          });
+        }
       }
       if (state === 'stopped') {
         return this.set({

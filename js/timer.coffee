@@ -9,6 +9,11 @@ class @Timer extends Backbone.Model
 
   start: -> @set state: 'playing'
   stop: -> @set state: 'stopped'
+  setPaused: (pause) -> 
+    if pause
+      @set state: 'paused'
+    else
+      @set state: 'playing'
 
   curTime: -> new Date().getTime()
 
@@ -39,7 +44,11 @@ class @Timer extends Backbone.Model
 
   _onStateChange: (timer,state,obj) ->
     if state == 'playing'
-      @set({startTime: @curTime()})
+      if @previous('state') == 'paused'
+        @setProgress(@get('progress'))
+
+      if @previous('state') == 'stopped'
+        @set({startTime: @curTime()})
 
     if state == 'stopped'
       @set({stopTime: @curTime()})

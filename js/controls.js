@@ -12,21 +12,27 @@
     }
 
     Controls.prototype.init = function() {
-      var folder, timeliner,
+      var folder, item,
         _this = this;
       this.destroy();
       $(document).on('mousedown', this.mousedown);
       $(document).on('keydown', this.keydown);
       this.gui = new dat.GUI();
       this.data = new function() {
-        return this.timeline = 0;
+        this.timeline = 0;
+        return this.loop = true;
       };
-      folder = this.gui.addFolder('Elements');
-      timeliner = folder.add(this.data, 'timeline', 0, 100);
+      folder = this.gui.addFolder('Animation');
       folder.open();
-      timeliner.listen();
-      return timeliner.onChange(function(val) {
+      item = folder.add(this.data, 'timeline', 0, 100);
+      item.listen();
+      item.onChange(function(val) {
         return _this.trigger('timeline', val / 100);
+      });
+      item = folder.add(this.data, 'loop');
+      item.listen();
+      return item.onChange(function(val) {
+        return _this.trigger('toggle-loop', val);
       });
     };
 

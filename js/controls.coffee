@@ -14,14 +14,18 @@ class @Controls extends Backbone.Model
 		@data = new ->
 			# @Stripes = => 
 			@timeline = 0
+			@loop = true
 
-		folder = @gui.addFolder 'Elements'
-		# folder.add(@data, 'Stripes').listen()
-		timeliner = folder.add(@data, 'timeline', 0, 100)
+		folder = @gui.addFolder 'Animation'
 		folder.open()
 
-		timeliner.listen()
-		timeliner.onChange (val) => @trigger('timeline', val/100) # communicate in 0.0 - 1.0 ranges with outside
+		item = folder.add(@data, 'timeline', 0, 100)
+		item.listen()
+		item.onChange (val) => @trigger('timeline', val/100) # communicate in 0.0 - 1.0 ranges with outside
+
+		item = folder.add(@data, 'loop')
+		item.listen()
+		item.onChange (val) => @trigger('toggle-loop', val)
 
 	destroy: ->
 		@trigger 'destroy'

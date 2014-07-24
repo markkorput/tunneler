@@ -43,6 +43,16 @@
       }
     };
 
+    Timer.prototype.setProgress = function(prog) {
+      return this.set({
+        startTime: this.curTime() - prog * this.get('duration')
+      });
+    };
+
+    Timer.prototype._looping = function() {
+      return this.get('loop') !== false;
+    };
+
     Timer.prototype.update = function() {
       var data;
       if (this.get('state') === 'playing') {
@@ -51,10 +61,17 @@
           progress: this._progress()
         };
         if (data.progress && data.progress > 1) {
+          if (this._looping()) {
+            this.set({
+              startTime: this.get('startTime') + this.get('duration')
+            });
+            this.update();
+            return;
+          }
           this.set({
-            startTime: this.get('startTime') + this.get('duration')
+            progress: 1,
+            time: this.get('duration')
           });
-          this.update();
           return;
         }
         return this.set(data);

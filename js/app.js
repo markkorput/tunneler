@@ -15,6 +15,14 @@
       this._initVfx();
       this._createScene();
       this.controls = new Controls();
+      this.controls.on('toggle-loop', (function(value) {
+        return this.timer.set({
+          loop: value
+        });
+      }), this);
+      this.controls.on('timeline', (function(value) {
+        return this.timer.setProgress(value);
+      }), this);
       this.timer = new Timer({
         duration: 3000
       });

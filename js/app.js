@@ -14,6 +14,7 @@
     App.prototype.init = function() {
       this._initVfx();
       this._createScene();
+      this.controls = new Controls();
       return this.update();
     };
 

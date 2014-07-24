@@ -6,7 +6,7 @@ class @App extends Backbone.Model
 	init: ->
 		@_initVfx()
 		@_createScene()
-		# @controls = new Controls({app: this})
+		@controls = new Controls()
 		@update()
 
 	_initVfx: ->

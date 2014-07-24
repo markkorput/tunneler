@@ -1,69 +1,46 @@
-class @Controls
+class @Controls extends Backbone.Model
 	constructor: (_opts) ->
 		@options = _opts
-		@initGUI()
-		@setupEventListeners()
+		@init()
 
-	app: -> @options.app
+	init: ->
+		@destroy()
 
-	bind: ( scope, fn ) ->
-		-> fn.apply scope, arguments
+		$(document).on 'mousedown', @mousedown
+		$(document).on 'keydown', @keydown
 
-	setupEventListeners: ->
-		document.addEventListener 'mousedown', @bind(this, @mousedown), false
-		document.addEventListener 'keydown', @bind(this, @keydown), false
+		@gui = new dat.GUI()
 
-	mousedown: ( event ) ->
-		return;
-		event.preventDefault()
-		event.stopPropagation()
+		data = new ->
+			# @Stripes = => 
+			@timeline = 0.0
 
-		console.log "Mousedown - creating random disturbance"
-		@app().disturbances.push( new DisturbancePicker({grid: @app().grid}).createDisturbance() )
-		@app().createDisturbance()
-
-	keydown: (event ) ->
-		# event.preventDefault()
-		# event.stopPropagation()
-		console.log "Keydown (event.which = " + event.which + ")"
-
-		if event.which >= 48 && event.which <= 57 # 0 - 9
-			@app().disturbances.push( new DisturbancePicker({grid: @app().grid}).indexDisturbance(event.which - 48) ) 
-
-		if(event.which == 27) # escape
-			console.log '[ESC] clearing disturbances array'
-			@app().disturbances = []
-			@app().grid.reset();
-
-		@app().togglePause() if event.which == 32 # SPACE
-
-		if event.which == 13 # ENTER
-			@app().renderer.preserveDrawingBuffer = true
-			window.open( @app().renderer.domElement.toDataURL( 'image/png' ), 'screenshot' );
-
-	initGUI: -> 
-		UiObject = =>
-			@reset = =>
-				@app().disturbances = []
-				@app().grid.reset();
-			@vSpin = =>
-				@app().disturbances.push( new DisturbancePicker({grid: @app().grid}).indexDisturbance(0) ) 
-			@hSpin = =>
-				@app().disturbances.push( new DisturbancePicker({grid: @app().grid}).indexDisturbance(1) ) 
-			this
-
-		uiobj = new UiObject()
-
-		@gui = new dat.GUI() # ({autoPlace:true});
-
-		# folder = @gui.addFolder 'Parameters'
-		# control = folder.add({gridPosX: -2200}, 'gridPosX', -3000, 0)
-		# control.onChange (value) -> console.log "Let's change grid pos to "+value
-
-		folder = @gui.addFolder 'Actions'
-		folder.add(uiobj, 'vSpin')
-		folder.add(uiobj, 'hSpin')
-		folder.add(uiobj, 'reset')
+		folder = @gui.addFolder 'Elements'
+		# folder.add(data, 'Stripes').listen => @trigger 'stripes'
+		folder.add(data, 'timeline', 0, 1).onChange (val) => @trigger 'timeline', val
 		folder.open()
+
+	destroy: ->
+		@trigger 'destroy'
+		$(document).off 'mousedown keydown'
+
+		if @gui
+			@gui.destroy()
+			@gui = undefined
+
+	mousedown: (e) ->
+		# console.log e
+		# e.preventDefault()
+		# e.stopPropagation()
+
+	keydown: (e) ->
+		# console.log e
+		# e.preventDefault()
+		# e.stopPropagation()
+
+		# if event.which >= 48 && event.which <= 57 # 0 - 9
+		@trigger 'reset' if(event.which == 27) # escape
+		@trigger 'toggle-pause' if event.which == 32 # SPACE
+		@trigger 'screenshot' if event.which == 13 # ENTER
 
 
